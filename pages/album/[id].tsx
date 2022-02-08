@@ -1,32 +1,17 @@
 import React, { useState } from "react";
 // import prisma from '../../db/prisma';
 
-import { Album, PrismaClient } from "@prisma/client";
+import { Album } from "@prisma/client";
 import Card from "../../components/Card";
-import {useRouter} from 'next/router';
-;
-
-
-const prisma = new PrismaClient();
+import { useRouter } from "next/router";
+import { prismaData } from "../../db/prismaData";
 
 export const getServerSideProps = async (context) => {
-  const album = await prisma.album.findUnique({
-    where: { id: Number(context.params.id) },
-    select: {
-      id: true,
-      record: true,
-      cover: true,
-      Band: {
-        select: {
-          name: true,
-        },
-      },
-    },
-  });
+  const album = await prismaData.album.one(context.params.id);
 
   return {
     props: {
-      album: album,
+      album,
     },
   };
 };
@@ -53,7 +38,7 @@ const AlbumDetail = ({ album }) => {
 
   const deleteRecord = async () => {
     console.log(album.id);
-    
+
     const response = await fetch("http://localhost:3000/api/album/delete", {
       method: "DELETE",
       body: JSON.stringify(album.id),
@@ -63,8 +48,7 @@ const AlbumDetail = ({ album }) => {
       throw new Error(response.statusText);
     }
 
-    if (response.ok) router.push('/') && console.log(`deleted ${album.id}`);
-    
+    if (response.ok) router.push("/") && console.log(`deleted ${album.id}`);
 
     return await response.json();
   };

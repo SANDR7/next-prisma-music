@@ -8,10 +8,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         return res.status(405).json({ message: "Method not allowed" });
 
     try {
-        const albumData: Prisma.AlbumUpdateInput = JSON.parse(req.body);
+        const albumData: any = JSON.parse(req.body);
         const savedAlbum = await prisma.album.update({
             where: {
-                id: albumData.id
+                id: Number(albumData.id)
             },
             data: {
                 record: albumData?.record.toString(),
