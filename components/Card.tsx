@@ -1,6 +1,5 @@
 import React from "react";
 import { Album  } from "@prisma/client";
-import Image from "next/image";
 
 
 const Card = ({ content }: { content: Album }) => {
@@ -12,7 +11,7 @@ const Card = ({ content }: { content: Album }) => {
         {content.record}
       </h2>
       <div>
-        <Image src={content.cover} alt="image" height={100} width={100} />
+        <img src={content.cover} alt="image" style={{width: '20%'}} />
       </div>
     </div>
   );

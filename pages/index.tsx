@@ -26,18 +26,18 @@ export const getStaticProps = async () => {
       },
     },
   });
-
+  
   return {
     props: {
       albums,
     },
-    revalidate: 10,
+    revalidate: 5,
   };
 };
 
 export default function Home({ albums }) {
-  const [field, setField] = useState<any>();
-  const [initialAlbums, setInitialAlbums] = useState<Album[]>(albums);
+  const [field, setField] = useState<Album[]>(albums);
+
 
   const addRecord = async (e: any) => {
     e.preventDefault();
@@ -51,7 +51,7 @@ export default function Home({ albums }) {
 
     e.target.reset();
     const updatedAlbums = await res.json();
-    setInitialAlbums([...initialAlbums, updatedAlbums]);
+    setField([...field, updatedAlbums]);
     return updatedAlbums;
   };
 
@@ -82,8 +82,8 @@ export default function Home({ albums }) {
           <input type="submit" value="Send" />
         </form>
 
-        {initialAlbums &&
-          initialAlbums.map((album: Album, idx: number) => (
+        {field &&
+          field.map((album: Album, idx: number) => (
             <Link passHref href={`album/${album.id}`} key={idx}>
               <a>
                 <Card content={album} />
