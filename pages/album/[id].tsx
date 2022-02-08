@@ -3,11 +3,14 @@ import React, { useState } from "react";
 
 import { Album, PrismaClient } from "@prisma/client";
 import Card from "../../components/Card";
+import {useRouter} from 'next/router';
+;
+
 
 const prisma = new PrismaClient();
 
 export const getServerSideProps = async (context) => {
-  const Album = await prisma.album.findUnique({
+  const album = await prisma.album.findUnique({
     where: { id: Number(context.params.id) },
     select: {
       id: true,
@@ -23,14 +26,14 @@ export const getServerSideProps = async (context) => {
 
   return {
     props: {
-      Album,
+      album: album,
     },
   };
 };
 
-const AlbumDetail = ({ Album }) => {
-  const [fields, setFields] = useState<Album>(Album);
-
+const AlbumDetail = ({ album }) => {
+  const [fields, setFields] = useState<Album>(album);
+  const router = useRouter();
 
   const updateRecord = async (e: any) => {
     e.preventDefault();
@@ -46,6 +49,24 @@ const AlbumDetail = ({ Album }) => {
     const updated = await response.json();
 
     return updated;
+  };
+
+  const deleteRecord = async () => {
+    console.log(album.id);
+    
+    const response = await fetch("http://localhost:3000/api/album/delete", {
+      method: "DELETE",
+      body: JSON.stringify(album.id),
+    });
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    if (response.ok) router.push('/') && console.log(`deleted ${album.id}`);
+    
+
+    return await response.json();
   };
   return (
     <div>
@@ -63,6 +84,7 @@ const AlbumDetail = ({ Album }) => {
           />
           <input type="submit" value="update" />
         </form>
+        <button onClick={deleteRecord}>Delete</button>
       </div>
     </div>
   );
