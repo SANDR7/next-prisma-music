@@ -1,5 +1,5 @@
 import React from "react";
-import { Album, Band } from "@prisma/client";
+import { Album  } from "@prisma/client";
 import Image from "next/image";
 
 
@@ -11,7 +11,6 @@ const Card = ({ content }: { content: Album }) => {
       <h2>
         {content.record}
       </h2>
-      <a href={content.spotify}>Spotify</a>
       <div>
         <Image src={content.cover} alt="image" height={100} width={100} />
       </div>

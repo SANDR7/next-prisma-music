@@ -1,4 +1,6 @@
 import Head from "next/head";
+import Link from "next/link";
+
 import { PrismaClient, Album } from "@prisma/client";
 import styles from "../styles/Home.module.css";
 import Card from "../components/Card";
@@ -8,6 +10,7 @@ export const getStaticProps = async () => {
   const prisma = new PrismaClient();
   const albums = await prisma.album.findMany({
     select: {
+      id: true,
       record: true,
       cover: true,
       spotify: true,
@@ -40,14 +43,16 @@ export default function Home({ albums }) {
     e.preventDefault();
     const res = await fetch("/api/album/create", {
       method: "POST",
-      body: field,
+      body: JSON.stringify(field),
     });
     if (!res.ok) {
       throw new Error(res.statusText);
     }
-    const test = await res.json();
-    setInitialAlbums([...initialAlbums, test])
-    return test;
+
+    e.target.reset();
+    const updatedAlbums = await res.json();
+    setInitialAlbums([...initialAlbums, updatedAlbums]);
+    return updatedAlbums;
   };
 
   return (
@@ -64,14 +69,26 @@ export default function Home({ albums }) {
             type="text"
             name="record"
             id="record"
-            onChange={(e) => setField(e.target.value)}
+            placeholder="record"
+            onChange={(e) => setField({ ...field, record: e.target.value })}
+          />
+          <input
+            type="text"
+            name="cover"
+            id="cover"
+            placeholder="cover"
+            onChange={(e) => setField({ ...field, cover: e.target.value })}
           />
           <input type="submit" value="Send" />
         </form>
 
         {initialAlbums &&
           initialAlbums.map((album: Album, idx: number) => (
-            <Card content={album} key={idx} />
+            <Link passHref href={`album/${album.id}`} key={idx}>
+              <a>
+                <Card content={album} />
+              </a>
+            </Link>
           ))}
       </main>
     </div>
