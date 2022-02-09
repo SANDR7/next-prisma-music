@@ -24,7 +24,7 @@ export default function Home({ albums }) {
 
   const addRecord = async (e: any) => {
     e.preventDefault();
-    const res = await fetch("/api/album/create", {
+    const res = await fetch(`/api/album/${field.id}`, {
       method: "POST",
       body: JSON.stringify(field),
     });

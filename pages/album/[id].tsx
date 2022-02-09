@@ -23,13 +23,15 @@ const AlbumDetail = ({ album }) => {
   const updateRecord = async (e: any) => {
     e.preventDefault();
 
-    const response = await fetch("http://localhost:3000/api/album/update", {
-      method: "PATCH",
-      body: JSON.stringify(fields),
-    });
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    const response = await fetch(
+      `http://localhost:3000/api/album/${fields.id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(fields),
+      }
+    );
+    if (!response.ok) throw new Error(response.statusText);
+
     e.target.reset();
     const updated = await response.json();
 
@@ -39,9 +41,8 @@ const AlbumDetail = ({ album }) => {
   const deleteRecord = async () => {
     console.log(album.id);
 
-    const response = await fetch("http://localhost:3000/api/album/delete", {
+    const response = await fetch(`http://localhost:3000/api/album/${fields.id}`, {
       method: "DELETE",
-      body: JSON.stringify(album.id),
     });
 
     if (!response.ok) {
