@@ -24,7 +24,7 @@ const AlbumDetail = ({ album }) => {
     e.preventDefault();
 
     const response = await fetch(
-      `http://localhost:3000/api/album/${fields.id}`,
+      `../api/album/${fields.id}`,
       {
         method: "PATCH",
         body: JSON.stringify(fields),
@@ -41,7 +41,7 @@ const AlbumDetail = ({ album }) => {
   const deleteRecord = async () => {
     console.log(album.id);
 
-    const response = await fetch(`http://localhost:3000/api/album/${fields.id}`, {
+    const response = await fetch(`../api/album/${fields.id}`, {
       method: "DELETE",
     });
 
