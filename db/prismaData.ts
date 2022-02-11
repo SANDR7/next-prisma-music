@@ -1,7 +1,4 @@
 import prisma from './prisma';
-;
-
-
 
 const readAlbums = async () => {
     const albums = await prisma.album.findMany({
