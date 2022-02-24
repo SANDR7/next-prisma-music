@@ -1,39 +1,43 @@
 import Head from "next/head";
 import Link from "next/link";
+import { useState } from "react";
+import Card from "../components/Card";
+import { prismaData } from "../db/prismaData";
+import {Album} from '@prisma/client'
 
 
 import styles from "../styles/Home.module.css";
 
-// export const getStaticProps = async () => {
-//   const albums = await prismaData.album.readAll;
+export const getStaticProps = async () => {
+  const albums = await prismaData.album.readAll;
 
-//   return {
-//     props: {
-//       albums,
-//     },
-//     revalidate: 10,
-//   };
-// };
+  return {
+    props: {
+      albums,
+    },
+    revalidate: 10,
+  };
+};
 
 export default function Home({ albums }) {
-  // const [field, setField] = useState<any>();
-  // const [initialAlbums, setInitialAlbums] = useState<Album[]>(albums);
+  const [field, setField] = useState<any>();
+  const [initialAlbums, setInitialAlbums] = useState<Album[]>(albums);
 
-  // const addRecord = async (e: any) => {
-  //   e.preventDefault();
-  //   const res = await fetch(`/api/album/${field.id}`, {
-  //     method: "POST",
-  //     body: JSON.stringify(field),
-  //   });
-  //   if (!res.ok) {
-  //     throw new Error(res.statusText);
-  //   }
+  const addRecord = async (e: any) => {
+    e.preventDefault();
+    const res = await fetch(`/api/album/${field.id}`, {
+      method: "POST",
+      body: JSON.stringify(field),
+    });
+    if (!res.ok) {
+      throw new Error(res.statusText);
+    }
 
-  //   e.target.reset();
-  //   const updatedAlbums = await res.json();
-  //   setInitialAlbums([...initialAlbums, updatedAlbums]);
-  //   return updatedAlbums;
-  // };
+    e.target.reset();
+    const updatedAlbums = await res.json();
+    setInitialAlbums([...initialAlbums, updatedAlbums]);
+    return updatedAlbums;
+  };
 
   return (
     <div className={styles.container}>
@@ -43,7 +47,7 @@ export default function Home({ albums }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {/* <main>
+      <main>
         <form onSubmit={addRecord}>
           <input
             type="text"
@@ -70,10 +74,8 @@ export default function Home({ albums }) {
               </a>
             </Link>
           ))}
-      </main> */}
-      <main>
-        hello?
       </main>
+      
     </div>
   );
 }
